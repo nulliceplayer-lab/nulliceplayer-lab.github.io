@@ -235,9 +235,11 @@ onSnapshot(q, (snapshot) => {
 
     uid.className = "uid";
 
-    uid.textContent =
-      "UID: " +
-      data.uid.slice(0, 8);
+uid.textContent =
+  "UID: " +
+  (data.uid
+    ? data.uid.slice(0, 8)
+    : "unknown");
 
     // text
     const text =
