@@ -24,21 +24,12 @@ from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
 // Firebase設定
 const firebaseConfig = {
-
-  apiKey: "API_KEY",
-
-  authDomain:
-    "PROJECT_ID.firebaseapp.com",
-
-  projectId: "PROJECT_ID",
-
-  storageBucket:
-    "PROJECT_ID.appspot.com",
-
-  messagingSenderId:
-    "SENDER_ID",
-
-  appId: "APP_ID"
+  apiKey: "AIzaSyBcDDo7gBq4Pj5PlvU41P1UYDm72jZfo10",
+  authDomain: "ipcnochess-fun.firebaseapp.com",
+  projectId: "ipcnochess-fun",
+  storageBucket: "ipcnochess-fun.firebasestorage.app",
+  messagingSenderId: "79607942504",
+  appId: "1:79607942504:web:9849235ae4a31ea517dadd"
 };
 
 
