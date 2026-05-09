@@ -3,23 +3,56 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Chatroom</title>
+
+  <meta http-equiv="Content-Security-Policy"
+  content="
+  default-src 'self';
+  script-src 'self' https://www.gstatic.com;
+  style-src 'self' 'unsafe-inline';
+  connect-src https://*.googleapis.com https://firestore.googleapis.com;
+  img-src 'self' https://*.googleusercontent.com data:;
+  ">
+
+  <title>Secure Firebase Chat</title>
+
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
   <div class="chat-container">
-    <h1>Hokusei Fun Chat V 1.1</h1>
+
+    <h1>Secure Chat</h1>
+
+    <div class="auth-area">
+      <button id="loginBtn">
+        Googleログイン
+      </button>
+
+      <button id="logoutBtn" style="display:none;">
+        ログアウト
+      </button>
+
+      <div id="userInfo"></div>
+    </div>
 
     <div id="messages"></div>
 
     <div class="input-area">
-      <input type="text" id="username" placeholder="名前">
-      <input type="text" id="messageInput" placeholder="メッセージ">
-      <button id="sendBtn">送信</button>
+
+      <input
+        type="text"
+        id="messageInput"
+        placeholder="メッセージ">
+
+      <button id="sendBtn">
+        送信
+      </button>
+
     </div>
+
   </div>
 
   <script type="module" src="app.js"></script>
+
 </body>
 </html>
