@@ -31,22 +31,43 @@ const messageInput = document.getElementById("messageInput");
 const usernameInput = document.getElementById("username");
 const messagesDiv = document.getElementById("messages");
 
+// 文字数制限
+const MAX_MESSAGE_LENGTH = 300;
+const MAX_USERNAME_LENGTH = 30;
+
+
 // メッセージ送信
 sendBtn.addEventListener("click", async () => {
 
-  const text = messageInput.value.trim();
-  const username = usernameInput.value.trim() || "名無し";
+  let text = messageInput.value.trim();
+  let username = usernameInput.value.trim();
+
+  if (!username) username = "名無し";
+
+  // 長さ制限
+  text = text.slice(0, MAX_MESSAGE_LENGTH);
+  username = username.slice(0, MAX_USERNAME_LENGTH);
 
   if (text === "") return;
 
-  await addDoc(collection(db, "messages"), {
-    username: username,
-    text: text,
-    createdAt: serverTimestamp()
-  });
+  try {
 
-  messageInput.value = "";
+    await addDoc(collection(db, "messages"), {
+      username,
+      text,
+      createdAt: serverTimestamp()
+    });
+
+    messageInput.value = "";
+
+  } catch (err) {
+
+    console.error(err);
+    alert("送信失敗");
+
+  }
 });
+
 
 // メッセージ受信
 const q = query(
@@ -62,15 +83,32 @@ onSnapshot(q, (snapshot) => {
 
     const data = doc.data();
 
-    const div = document.createElement("div");
-    div.className = "message";
+    // message box
+    const wrapper = document.createElement("div");
+    wrapper.className = "message";
 
-    div.innerHTML = `
-      <span class="username">${data.username}</span><br>
-      ${data.text}
-    `;
+    // username
+    const usernameEl = document.createElement("span");
+    usernameEl.className = "username";
 
-    messagesDiv.appendChild(div);
+    // textContentを使う
+    usernameEl.textContent = data.username;
+
+    // 改行
+    const br = document.createElement("br");
+
+    // message
+    const textEl = document.createElement("span");
+
+    // textContentを使う
+    textEl.textContent = data.text;
+
+    // append
+    wrapper.appendChild(usernameEl);
+    wrapper.appendChild(br);
+    wrapper.appendChild(textEl);
+
+    messagesDiv.appendChild(wrapper);
   });
 
   messagesDiv.scrollTop = messagesDiv.scrollHeight;
