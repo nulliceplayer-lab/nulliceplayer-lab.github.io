@@ -153,9 +153,10 @@ sendBtn.addEventListener(
 
         uid: String(user.uid),
 
-        username:
-          String(user.displayName || "Unknown"),
-
+    username:
+    localStorage.getItem("nickname")
+    || user.displayName
+    || "Unknown",
         photoURL:
           String(user.photoURL || ""),
 
