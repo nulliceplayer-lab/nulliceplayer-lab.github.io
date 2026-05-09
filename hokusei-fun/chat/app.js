@@ -1,4 +1,5 @@
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import { initializeApp }
+from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 
 import {
   getFirestore,
@@ -8,65 +9,175 @@ import {
   orderBy,
   onSnapshot,
   serverTimestamp
-} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+}
+from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+import {
+  getAuth,
+  GoogleAuthProvider,
+  signInWithPopup,
+  signOut,
+  onAuthStateChanged
+}
+from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
 
 // Firebase設定
 const firebaseConfig = {
-  apiKey: "AIzaSyBcDDo7gBq4Pj5PlvU41P1UYDm72jZfo10",
-  authDomain: "ipcnochess-fun.firebaseapp.com",
-  projectId: "ipcnochess-fun",
-  storageBucket: "ipcnochess-fun.firebasestorage.app",
-  messagingSenderId: "79607942504",
-  appId: "1:79607942504:web:9849235ae4a31ea517dadd"
+
+  apiKey: "API_KEY",
+
+  authDomain:
+    "PROJECT_ID.firebaseapp.com",
+
+  projectId: "PROJECT_ID",
+
+  storageBucket:
+    "PROJECT_ID.appspot.com",
+
+  messagingSenderId:
+    "SENDER_ID",
+
+  appId: "APP_ID"
 };
+
 
 // 初期化
 const app = initializeApp(firebaseConfig);
+
 const db = getFirestore(app);
 
-// HTML要素
-const sendBtn = document.getElementById("sendBtn");
-const messageInput = document.getElementById("messageInput");
-const usernameInput = document.getElementById("username");
-const messagesDiv = document.getElementById("messages");
+const auth = getAuth(app);
 
-// 文字数制限
-const MAX_MESSAGE_LENGTH = 300;
-const MAX_USERNAME_LENGTH = 30;
+const provider =
+  new GoogleAuthProvider();
+
+
+// HTML
+const loginBtn =
+  document.getElementById("loginBtn");
+
+const logoutBtn =
+  document.getElementById("logoutBtn");
+
+const userInfo =
+  document.getElementById("userInfo");
+
+const sendBtn =
+  document.getElementById("sendBtn");
+
+const messageInput =
+  document.getElementById("messageInput");
+
+const messagesDiv =
+  document.getElementById("messages");
+
+
+// Googleログイン
+loginBtn.addEventListener(
+  "click",
+  async () => {
+
+    try {
+
+      await signInWithPopup(
+        auth,
+        provider
+      );
+
+    } catch (err) {
+
+      console.error(err);
+    }
+  }
+);
+
+
+// ログアウト
+logoutBtn.addEventListener(
+  "click",
+  async () => {
+
+    await signOut(auth);
+  }
+);
+
+
+// ログイン状態監視
+onAuthStateChanged(auth, (user) => {
+
+  if (user) {
+
+    loginBtn.style.display =
+      "none";
+
+    logoutBtn.style.display =
+      "inline-block";
+
+    userInfo.innerHTML = `
+      <img
+        class="avatar"
+        src="${user.photoURL}">
+      <br>
+      ${user.displayName}
+    `;
+
+  } else {
+
+    loginBtn.style.display =
+      "inline-block";
+
+    logoutBtn.style.display =
+      "none";
+
+    userInfo.textContent =
+      "未ログイン";
+  }
+});
 
 
 // メッセージ送信
-sendBtn.addEventListener("click", async () => {
+sendBtn.addEventListener(
+  "click",
+  async () => {
 
-  let text = messageInput.value.trim();
-  let username = usernameInput.value.trim();
+    const user = auth.currentUser;
 
-  if (!username) username = "名無し";
+    if (!user) {
 
-  // 長さ制限
-  text = text.slice(0, MAX_MESSAGE_LENGTH);
-  username = username.slice(0, MAX_USERNAME_LENGTH);
+      alert("ログインしてください");
+      return;
+    }
 
-  if (text === "") return;
+    let text =
+      messageInput.value.trim();
 
-  try {
+    text = text.slice(0, 300);
 
-    await addDoc(collection(db, "messages"), {
-      username,
-      text,
-      createdAt: serverTimestamp()
-    });
+    if (!text) return;
+
+    await addDoc(
+      collection(db, "messages"),
+      {
+
+        uid: user.uid,
+
+        username:
+          user.displayName,
+
+        photoURL:
+          user.photoURL,
+
+        text,
+
+        createdAt:
+          serverTimestamp()
+      }
+    );
 
     messageInput.value = "";
-
-  } catch (err) {
-
-    console.error(err);
-    alert("送信失敗");
-
   }
-});
+);
 
 
 // メッセージ受信
@@ -83,33 +194,61 @@ onSnapshot(q, (snapshot) => {
 
     const data = doc.data();
 
-    // message box
-    const wrapper = document.createElement("div");
-    wrapper.className = "message";
+    const div =
+      document.createElement("div");
 
-    // username
-    const usernameEl = document.createElement("span");
-    usernameEl.className = "username";
+    div.className = "message";
 
-    // textContentを使う
-    usernameEl.textContent = data.username;
+    // 自分の投稿判定
+    if (
+      auth.currentUser &&
+      data.uid === auth.currentUser.uid
+    ) {
 
-    // 改行
-    const br = document.createElement("br");
+      div.classList.add("mine");
+    }
 
-    // message
-    const textEl = document.createElement("span");
+    // icon
+    const img =
+      document.createElement("img");
 
-    // textContentを使う
-    textEl.textContent = data.text;
+    img.src = data.photoURL;
+    img.className = "avatar";
 
-    // append
-    wrapper.appendChild(usernameEl);
-    wrapper.appendChild(br);
-    wrapper.appendChild(textEl);
+    // name
+    const name =
+      document.createElement("div");
 
-    messagesDiv.appendChild(wrapper);
+    name.className = "username";
+
+    name.textContent =
+      data.username;
+
+    // uid
+    const uid =
+      document.createElement("div");
+
+    uid.className = "uid";
+
+    uid.textContent =
+      "UID: " +
+      data.uid.slice(0, 8);
+
+    // text
+    const text =
+      document.createElement("div");
+
+    text.textContent =
+      data.text;
+
+    div.appendChild(img);
+    div.appendChild(name);
+    div.appendChild(uid);
+    div.appendChild(text);
+
+    messagesDiv.appendChild(div);
   });
 
-  messagesDiv.scrollTop = messagesDiv.scrollHeight;
+  messagesDiv.scrollTop =
+    messagesDiv.scrollHeight;
 });
