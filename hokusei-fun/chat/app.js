@@ -1,4 +1,3 @@
-// Firebase SDK
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 
 import {
@@ -11,13 +10,8 @@ import {
   serverTimestamp
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
-import {
-  getAuth,
-  signInAnonymously
-} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
-
-// Firebaseを設定
+// Firebase設定
 const firebaseConfig = {
   apiKey: "AIzaSyBcDDo7gBq4Pj5PlvU41P1UYDm72jZfo10",
   authDomain: "ipcnochess-fun.firebaseapp.com",
@@ -27,54 +21,54 @@ const firebaseConfig = {
   appId: "1:79607942504:web:9849235ae4a31ea517dadd"
 };
 
-
 // 初期化
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
-const auth = getAuth(app);
 
-
-// 匿名ログイン
-await signInAnonymously(auth);
-
-
-// DOM
-const messagesDiv = document.getElementById("messages");
-const input = document.getElementById("messageInput");
+// HTML要素
 const sendBtn = document.getElementById("sendBtn");
+const messageInput = document.getElementById("messageInput");
+const usernameInput = document.getElementById("username");
+const messagesDiv = document.getElementById("messages");
 
-
-// 送信
+// メッセージ送信
 sendBtn.addEventListener("click", async () => {
-  const text = input.value.trim();
 
-  if (!text) return;
+  const text = messageInput.value.trim();
+  const username = usernameInput.value.trim() || "名無し";
+
+  if (text === "") return;
 
   await addDoc(collection(db, "messages"), {
-    text,
-    createdAt: serverTimestamp(),
-    uid: auth.currentUser.uid
+    username: username,
+    text: text,
+    createdAt: serverTimestamp()
   });
 
-  input.value = "";
+  messageInput.value = "";
 });
 
-
-// リアルタイム受信
+// メッセージ受信
 const q = query(
   collection(db, "messages"),
   orderBy("createdAt")
 );
 
 onSnapshot(q, (snapshot) => {
+
   messagesDiv.innerHTML = "";
 
   snapshot.forEach((doc) => {
+
     const data = doc.data();
 
     const div = document.createElement("div");
     div.className = "message";
-    div.textContent = data.text;
+
+    div.innerHTML = `
+      <span class="username">${data.username}</span><br>
+      ${data.text}
+    `;
 
     messagesDiv.appendChild(div);
   });
