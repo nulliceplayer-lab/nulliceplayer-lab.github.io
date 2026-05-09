@@ -132,44 +132,58 @@ sendBtn.addEventListener(
   "click",
   async () => {
 
-    const user = auth.currentUser;
+    try {
 
-    if (!user) {
+      const user = auth.currentUser;
 
-      alert("ログインしてください");
-      return;
-    }
+      if (!user) {
 
-    let text =
-      messageInput.value.trim();
+        alert("ログイン必要");
+        return;
+      }
 
-    text = text.slice(0, 300);
+      let text =
+        messageInput.value.trim();
 
-    if (!text) return;
+      text = text.slice(0, 300);
 
-    await addDoc(
-      collection(db, "messages"),
-      {
+      if (!text) return;
 
-        uid: user.uid,
+      const messageData = {
+
+        uid: String(user.uid),
 
         username:
-          user.displayName,
+          String(user.displayName || "Unknown"),
 
         photoURL:
-          user.photoURL,
+          String(user.photoURL || ""),
 
-        text,
+        text: String(text),
 
         createdAt:
           serverTimestamp()
-      }
-    );
+      };
 
-    messageInput.value = "";
+      console.log(messageData);
+
+      await addDoc(
+        collection(db, "messages"),
+        messageData
+      );
+
+      messageInput.value = "";
+
+    } catch (err) {
+
+      console.error(err);
+
+      alert(
+        "送信失敗:\n" + err.message
+      );
+    }
   }
 );
-
 
 // メッセージ受信
 const q = query(
