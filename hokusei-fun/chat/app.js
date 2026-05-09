@@ -259,3 +259,44 @@ uid.textContent =
   messagesDiv.scrollTop =
     messagesDiv.scrollHeight;
 });
+
+const nicknameInput =
+  document.getElementById(
+    "nicknameInput"
+  );
+
+const saveNicknameBtn =
+  document.getElementById(
+    "saveNicknameBtn"
+  );
+// ニックネーム保存
+saveNicknameBtn.addEventListener(
+  "click",
+  () => {
+
+    let nickname =
+      nicknameInput.value.trim();
+
+    nickname =
+      nickname.slice(0, 20);
+
+    if (!nickname) return;
+
+    localStorage.setItem(
+      "nickname",
+      nickname
+    );
+
+    alert("保存しました");
+  }
+);
+const savedNickname =
+  localStorage.getItem(
+    "nickname"
+  );
+
+if (savedNickname) {
+
+  nicknameInput.value =
+    savedNickname;
+}
