@@ -25,10 +25,10 @@
 <button onclick="
 window.open('about:blank', '_blank')
 // 流し込みたいHTMLコード
-const htmlCode = `
+const htmlCode = '
   <h2>新しいタブのabout:blank</h2>
   <p>スクリプトから生成されました。</p>
-`;
+';
 
 // 新しいタブでabout:blankを開く
 const newWindow = window.open('about:blank', '_blank');
