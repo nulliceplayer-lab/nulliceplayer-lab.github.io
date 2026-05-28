@@ -22,7 +22,25 @@
                         <h1>Slow_scriptへようこそ！</h1>
                         <p>Slow_scriptはabout:blankを経由して<b>履歴に残さない</b>ツールサイトです。</p>
                         <p>さっそくですがYoutube見たいですよね？そんなあなたには<b>Youtubeダウンローダー</b>を使いましょう。YoutubeダウンローダーはYoutubeのリンクを打つだけでなんとYoutubeの動画が見れます！ですが、ブロックツールがダウンロードを妨害する可能性があります。</p>
-<button onclick="window.open('about:blank', '_blank')">Youtubeダウンローダーへ</button>
+<button onclick="
+window.open('about:blank', '_blank')
+// 流し込みたいHTMLコード
+const htmlCode = `
+  <h2>新しいタブのabout:blank</h2>
+  <p>スクリプトから生成されました。</p>
+`;
+
+// 新しいタブでabout:blankを開く
+const newWindow = window.open('about:blank', '_blank');
+
+// 新しいタブのドキュメントに書き込む
+if (newWindow) {
+  newWindow.document.open();
+  newWindow.document.write(htmlCode);
+  newWindow.document.close();
+}
+
+">Youtubeダウンローダーへ</button>
 
                     </div>
                 </body>
