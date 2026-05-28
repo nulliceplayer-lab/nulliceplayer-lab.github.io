@@ -19,9 +19,8 @@
                         <h1>Slow_scriptへようこそ！</h1>
                         <p>Slow_scriptはabout:blankを経由して<b>履歴に残さない</b>ツールサイトです。</p>
                         <p>さっそくですがYoutube見たいですよね？そんなあなたには<b>Youtubeダウンローダー</b>を使いましょう。YoutubeダウンローダーはYoutubeのリンクを打つだけでなんとYoutubeの動画が見れます！ですが、ブロックツールがダウンロードを妨害する可能性があります。</p>
-<button>Youtubeダウンローダーへ</button>
-</body>
-</html>
+                </body>
+                </html>
     `;
             
     newWindow.document.open();
@@ -29,5 +28,5 @@
     newWindow.document.close();
 } else {
     alert('ポップアップがブロックされました。ブラウザの設定を許可してください。');
-}
+        }
 
