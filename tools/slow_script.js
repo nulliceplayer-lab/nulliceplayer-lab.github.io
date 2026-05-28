@@ -24,6 +24,9 @@
                         <p>さっそくですがYoutube見たいですよね？そんなあなたには<b>Youtubeダウンローダー</b>を使いましょう。YoutubeダウンローダーはYoutubeのリンクを打つだけでなんとYoutubeの動画が見れます！ですが、ブロックツールがダウンロードを妨害する可能性があります。</p>
 <button id="1" oneclick="window.open('about:blank', '_blank');">Youtubeダウンローダーへ</button>
 <script>
+
+const btn = document.getElementById('1');
+
 if (newWindow) {
     const htmlContent = `
         <!DOCTYPE html>
