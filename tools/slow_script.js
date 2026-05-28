@@ -24,23 +24,10 @@
 </html>
     `;
             
-
-    // 3. ドキュメントを開いてHTMLを書き込み、閉じる
     newWindow.document.open();
     newWindow.document.write(htmlContent);
     newWindow.document.close();
 } else {
     alert('ポップアップがブロックされました。ブラウザの設定を許可してください。');
 }
-
-
-           `;
-
-            newWindow.document.open();
-            newWindow.document.write(htmlContent);
-            newWindow.document.close(); 
-        } else {
-            alert('ポップアップがブロックされました。ブラウザの設定を許可してください。');
-        }
-    });
 
