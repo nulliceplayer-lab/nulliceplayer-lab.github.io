@@ -1,10 +1,8 @@
 // 作成まで待機してね
     document.getElementById('openBtn').addEventListener('click', () => {
-        // 1. まず完全に空の「about:blank」ページを新しいタブで開く
         const newWindow = window.open('about:blank', '_blank');
 
         if (newWindow) {
-            // 2. 表示したいHTMLコンテンツを定義する（ここに好きなデザインを書けます）
             const htmlContent = `
                 <!DOCTYPE html>
                 <html lang="ja">
@@ -26,16 +24,14 @@
 
             `;
 
-            // 3. 開いた「about:blank」のドキュメントにHTMLを直接書き込む
             newWindow.document.open();
             newWindow.document.write(htmlContent);
-            newWindow.document.close(); // 書き込み完了をブラウザに伝える
+            newWindow.document.close(); 
         } else {
             alert('ポップアップがブロックされました。ブラウザの設定を許可してください。');
         }
     });
 
-// about:blank層は終わり
 
 
 
