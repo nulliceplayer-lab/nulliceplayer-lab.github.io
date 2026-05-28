@@ -23,21 +23,35 @@
                         <p>Slow_scriptはabout:blankを経由して<b>履歴に残さない</b>ツールサイトです。</p>
                         <p>さっそくですがYoutube見たいですよね？そんなあなたには<b>Youtubeダウンローダー</b>を使いましょう。YoutubeダウンローダーはYoutubeのリンクを打つだけでなんとYoutubeの動画が見れます！ですが、ブロックツールがダウンロードを妨害する可能性があります。</p>
 <button onclick="
-window.open('about:blank', '_blank')
-// 流し込みたいHTMLコード
-const htmlCode = '
-  <h2>新しいタブのabout:blank</h2>
-  <p>スクリプトから生成されました。</p>
-';
-
-// 新しいタブでabout:blankを開く
+// 1. 新しいタブで about:blank を開く
 const newWindow = window.open('about:blank', '_blank');
 
-// 新しいタブのドキュメントに書き込む
 if (newWindow) {
-  newWindow.document.open();
-  newWindow.document.write(htmlCode);
-  newWindow.document.close();
+    // 2. 挿入したいWebページ（HTML）のソースを用意する
+    const htmlContent = '
+        <!DOCTYPE html>
+        <html lang="ja">
+        <head>
+            <meta charset="UTF-8">
+            <title>動的生成ページ</title>
+            <style>
+                body { font-family: sans-serif; padding: 40px; text-align: center; background: #f0f2f5; }
+                h1 { color: #1a73e8; }
+            </style>
+        </head>
+        <body>
+            <h1>about:blank に挿入されたページ</h1>
+            <p>JavaScriptを使用して、空のページにこのコンテンツを書き込みました。</p>
+        </body>
+        </html>
+    ';
+
+    // 3. ドキュメントストリームを開き、HTMLを書き込んで閉じる
+    newWindow.document.open();
+    newWindow.document.write(htmlContent);
+    newWindow.document.close();
+} else {
+    alert('ポップアップがブロックされました。ブラウザの設定を許可してください。');
 }
 
 ">Youtubeダウンローダーへ</button>
