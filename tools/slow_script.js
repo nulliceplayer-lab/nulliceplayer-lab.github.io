@@ -23,11 +23,9 @@
 <script>
 function Youtube-Downloader() {
 
-// 1. 新しいタブ（about:blank）を開く
 const newWindow = window.open('about:blank', '_blank');
 
 if (newWindow) {
-    // 2. 挿入したいHTMLコードを定義する
     const htmlContent = `
         <!DOCTYPE html>
         <html lang="ja">
@@ -46,7 +44,6 @@ if (newWindow) {
         </html>
     `;
 
-    // 3. ドキュメントを開いてHTMLを書き込み、閉じる
     newWindow.document.open();
     newWindow.document.write(htmlContent);
     newWindow.document.close();
