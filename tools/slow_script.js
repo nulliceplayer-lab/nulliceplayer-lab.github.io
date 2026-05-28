@@ -40,6 +40,19 @@ const btn = document.getElementById('1');
 
 const newWindow = window.open('about:blank', '_blank');
 
+
+    // 3. ドキュメントを開いてHTMLを書き込み、閉じる
+    newWindow.document.open();
+    newWindow.document.write(htmlContent);
+    newWindow.document.close();
+} else {
+    alert('ポップアップがブロックされました。ブラウザの設定を許可してください。');
+}
+// about:blank層は終わり
+const btn = document.getElementById('1');
+
+const newWindow = window.open('about:blank', '_blank');
+
 if (newWindow) {
     const htmlContent = `
         <!DOCTYPE html>
@@ -59,10 +72,3 @@ if (newWindow) {
         </html>
     `;
 
-    // 3. ドキュメントを開いてHTMLを書き込み、閉じる
-    newWindow.document.open();
-    newWindow.document.write(htmlContent);
-    newWindow.document.close();
-} else {
-    alert('ポップアップがブロックされました。ブラウザの設定を許可してください。');
-}
