@@ -1,8 +1,8 @@
-document.getElementById('openBtn').addEventListener('click', () => {
-    const newWindow = window.open('about:blank', '_blank');
+document.getElementById("openBtn").addEventListener("click", () => {
+  const newWindow = window.open("about:blank", "_blank");
 
-    if (newWindow) {
-        const htmlContent = `
+  if (newWindow) {
+    const htmlContent = `
             <!DOCTYPE html>
             <html lang="ja">
             <head>
@@ -19,15 +19,15 @@ document.getElementById('openBtn').addEventListener('click', () => {
                     <h1>Slow_scriptへようこそ！</h1>
                     <p>Slow_scriptはabout:blankを経由して<b>履歴に残さない</b>ツールサイトです。</p>
                     <p>さっそくですがYoutube見たいですよね？そんなあなたには<b>Youtubeダウンローダー</b>を使いましょう。YoutubeダウンローダーはYoutubeのリンクを打つだけでなんとYoutubeの動画が見れます！ですが、ブロックツールがダウンロードを妨害する可能性があります。</p>
+                    <button id="Youtube-Downloader">Youtubeダウンローダーへ</button>
+                    <script src="https://m59qxx.csb.app/YoutubeDLR.js"></script>
                 </div>
             </body>
             </html>
         `;
-                
-        newWindow.document.open();
-        newWindow.document.write(htmlContent);
-        newWindow.document.close();
-    } else {
-        alert('ポップアップがブロックされました。ブラウザの設定を許可してください。');
-    }
+
+    newWindow.document.open();
+    newWindow.document.write(htmlContent);
+    newWindow.document.close();
+  }
 });
