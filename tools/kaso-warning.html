@@ -1,79 +1,167 @@
-  <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="ja">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>過疎警報 - 表</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>過疎警報 - 表</title>
+
+<style>
+body {
+  font-family: "Noto Sans JP", sans-serif;
+  background: #f4f6f8;
+  padding: 30px;
+}
+
+.table-container {
+  max-width: 900px;
+  margin: auto;
+  overflow-x: auto;
+  background: white;
+  padding: 20px;
+  border-radius: 15px;
+  box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 600px;
+}
+
+th {
+  background: #2c3e50;
+  color: white;
+  padding: 15px;
+  font-size: 18px;
+}
+
+td {
+  padding: 13px;
+  text-align: center;
+  border-bottom: 1px solid #ddd;
+}
+
+tr:nth-child(even) {
+  background: #f8f9fa;
+}
+
+tr:hover {
+  background: #e8f4ff;
+  transition: 0.2s;
+}
+
+/* レベル表示 */
+.level {
+  font-weight: bold;
+  font-size: 18px;
+  width: 80px;
+}
+
+/* 危険度カラー */
+.lv0 { background:#d4edda; }
+.lv1 { background:#e8f5e9; }
+.lv2 { background:#fff3cd; }
+.lv3 { background:#ffe0b2; }
+.lv35 { background:#ffcc80; }
+.lv4 { background:#ffb3b3; }
+.lv45 { background:#ff9999; }
+.lv5 { background:#ff6666; color:white; }
+.lv6 { background:#d9534f; color:white; }
+.lv7 { background:#c9302c; color:white; }
+.lv8 { background:#8b0000; color:white; }
+.lv9 { background:#000; color:white; }
+
+</style>
+
 </head>
+
 <body>
-<div class="1">
+
+<div class="table-container">
+
 <table>
-  <tr>
-    <td>レベル</td>
-    <td>警報名</td>
-    <td>説明</td>
-  </tr>
-  <tr>
-    <td>0</td>
-    <td>通常</td>
-    <td>いつもどおりの活発時</td>
-  </tr>
-  <tr>
-    <td>1</td>
-    <td>小規模人口減少</td>
-    <td>人口が少し減る</td>
-  </tr>
-    <tr>
-    <td>2</td>
-    <td>人口減少</td>
-    <td>十人程人が減る</td>
-  </tr>
-    <tr>
-    <td>3</td>
-    <td>大規模人口減少</td>
-    <td>数十人程減る</td>
-  </tr>
-    <tr>
-    <td>3.5</td>
-    <td>朝方大規模人口減少帯</td>
-    <td>朝方で人口が大幅に減る</td>
-  </tr>
-    <tr>
-    <td>4</td>
-    <td>会話困難</td>
-    <td>会話が続かない程人が減る</td>
-  </tr>
-    <tr>
-    <td>4.5</td>
-    <td>夜中会話困難帯</td>
-    <td>夜中で会話が困難になる</td>
-  </tr>
-    <tr>
-    <td>5</td>
-    <td>完全無活動状態</td>
-    <td>10分以上活動が少ない</td>
-  </tr>
-    <tr>
-    <td>6</td>
-    <td>崩壊状態</td>
-    <td>数十分活動が無い</td>
-  </tr>
-  <tr>
-    <td>7</td>
-    <td>小規模人口減少</td>
-    <td>人口が少し減る</td>
-  </tr>
-    <tr>
-    <td>8</td>
-    <td>文明崩壊</td>
-    <td>活動が30分規模で少ない</td>
-  </tr>
-    <tr>
-    <td>9</td>
-    <td>絶滅状態</td>
-    <td>1時間程活動が少ない</td>
-  </tr>
+
+<tr>
+<th>レベル</th>
+<th>警報名</th>
+<th>説明</th>
+</tr>
+
+<tr>
+<td class="level lv0">0</td>
+<td>通常</td>
+<td>いつもどおりの活発時</td>
+</tr>
+
+<tr>
+<td class="level lv1">1</td>
+<td>小規模人口減少</td>
+<td>人口が少し減る</td>
+</tr>
+
+<tr>
+<td class="level lv2">2</td>
+<td>人口減少</td>
+<td>十人程人が減る</td>
+</tr>
+
+<tr>
+<td class="level lv3">3</td>
+<td>大規模人口減少</td>
+<td>数十人程減る</td>
+</tr>
+
+<tr>
+<td class="level lv35">3.5</td>
+<td>朝方大規模人口減少帯</td>
+<td>朝方で人口が大幅に減る</td>
+</tr>
+
+<tr>
+<td class="level lv4">4</td>
+<td>会話困難</td>
+<td>会話が続かない程人が減る</td>
+</tr>
+
+<tr>
+<td class="level lv45">4.5</td>
+<td>夜中会話困難帯</td>
+<td>夜中で会話が困難になる</td>
+</tr>
+
+<tr>
+<td class="level lv5">5</td>
+<td>完全無活動状態</td>
+<td>10分以上活動が少ない</td>
+</tr>
+
+<tr>
+<td class="level lv6">6</td>
+<td>崩壊状態</td>
+<td>数十分活動が無い</td>
+</tr>
+
+<tr>
+<td class="level lv7">7</td>
+<td>小規模人口減少</td>
+<td>人口が少し減る</td>
+</tr>
+
+<tr>
+<td class="level lv8">8</td>
+<td>文明崩壊</td>
+<td>活動が30分規模で少ない</td>
+</tr>
+
+<tr>
+<td class="level lv9">9</td>
+<td>絶滅状態</td>
+<td>1時間程活動が少ない</td>
+</tr>
+
 </table>
+
 </div>
+
 </body>
 </html>
