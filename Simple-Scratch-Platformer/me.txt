@@ -1,0 +1,3 @@
+This work is packaged using turbowarp. Updates may take several weeks. For details, please run from index.html and press the R key.
+
+Only Japanese is supported.
