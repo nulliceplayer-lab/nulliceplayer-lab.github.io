@@ -1,0 +1,3694 @@
+```html
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Scratch User Analytics</title>
+
+<style>
+/* =========================================================
+   RESET
+========================================================= */
+
+* {
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    margin: 0;
+    font-family:
+        Inter,
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        "Noto Sans JP",
+        sans-serif;
+
+    background: #f4f6fa;
+    color: #1f2937;
+}
+
+
+/* =========================================================
+   THEME
+========================================================= */
+
+body.dark {
+    background: #0f172a;
+    color: #f8fafc;
+}
+
+body.dark .card,
+body.dark .sidebar,
+body.dark .topbar,
+body.dark .project,
+body.dark .mini-user,
+body.dark .stat-card {
+    background: #1e293b;
+    border-color: #334155;
+}
+
+body.dark .muted,
+body.dark .username,
+body.dark .project-meta,
+body.dark .activity-time {
+    color: #94a3b8;
+}
+
+body.dark input,
+body.dark select {
+    background: #0f172a;
+    color: white;
+    border-color: #334155;
+}
+
+
+/* =========================================================
+   VARIABLES
+========================================================= */
+
+:root {
+    --orange: #ffab19;
+    --orange-dark: #e89400;
+
+    --blue: #4c97ff;
+    --green: #4ade80;
+    --purple: #a78bfa;
+    --pink: #fb7185;
+
+    --border: #e5e7eb;
+    --muted: #6b7280;
+
+    --sidebar-width: 250px;
+}
+
+
+/* =========================================================
+   LAYOUT
+========================================================= */
+
+.app {
+    min-height: 100vh;
+}
+
+.sidebar {
+    position: fixed;
+    left: 0;
+    top: 0;
+    bottom: 0;
+
+    width: var(--sidebar-width);
+
+    background: white;
+    border-right: 1px solid var(--border);
+
+    padding: 25px 18px;
+
+    z-index: 20;
+}
+
+.main {
+    margin-left: var(--sidebar-width);
+    min-height: 100vh;
+}
+
+
+/* =========================================================
+   SIDEBAR
+========================================================= */
+
+.brand {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+
+    font-size: 20px;
+    font-weight: 900;
+
+    margin-bottom: 35px;
+}
+
+.brand-icon {
+    width: 38px;
+    height: 38px;
+
+    border-radius: 12px;
+
+    display: grid;
+    place-items: center;
+
+    background: var(--orange);
+    color: white;
+
+    font-size: 21px;
+}
+
+.nav-title {
+    color: var(--muted);
+    font-size: 11px;
+    font-weight: 800;
+
+    letter-spacing: 1px;
+
+    margin:
+        20px
+        10px
+        8px;
+}
+
+.nav-item {
+    display: flex;
+    align-items: center;
+
+    gap: 12px;
+
+    padding: 12px 13px;
+
+    border-radius: 11px;
+
+    color: #64748b;
+
+    text-decoration: none;
+
+    font-size: 14px;
+    font-weight: 650;
+
+    margin-bottom: 4px;
+
+    transition: .15s;
+}
+
+.nav-item:hover {
+    background: #fff7e6;
+    color: var(--orange-dark);
+}
+
+.nav-item.active {
+    background: #fff3d6;
+    color: var(--orange-dark);
+}
+
+.nav-icon {
+    width: 21px;
+    text-align: center;
+}
+
+
+/* =========================================================
+   TOPBAR
+========================================================= */
+
+.topbar {
+    height: 72px;
+
+    background: white;
+
+    border-bottom: 1px solid var(--border);
+
+    display: flex;
+    align-items: center;
+
+    padding: 0 30px;
+
+    gap: 15px;
+
+    position: sticky;
+    top: 0;
+
+    z-index: 10;
+}
+
+.search {
+    flex: 1;
+
+    max-width: 600px;
+
+    display: flex;
+
+    gap: 8px;
+}
+
+.search input {
+    flex: 1;
+
+    border: 1px solid var(--border);
+
+    border-radius: 10px;
+
+    padding: 12px 15px;
+
+    outline: none;
+
+    font-size: 14px;
+}
+
+.search button {
+    border: 0;
+
+    border-radius: 10px;
+
+    background: var(--orange);
+
+    color: white;
+
+    font-weight: 800;
+
+    padding: 0 18px;
+
+    cursor: pointer;
+}
+
+.search button:hover {
+    background: var(--orange-dark);
+}
+
+.top-actions {
+    margin-left: auto;
+
+    display: flex;
+
+    gap: 8px;
+}
+
+.top-button {
+    width: 42px;
+    height: 42px;
+
+    border: 1px solid var(--border);
+
+    background: white;
+
+    border-radius: 10px;
+
+    cursor: pointer;
+
+    font-size: 17px;
+}
+
+
+/* =========================================================
+   CONTENT
+========================================================= */
+
+.content {
+    max-width: 1450px;
+
+    margin: auto;
+
+    padding: 28px 30px 60px;
+}
+
+
+/* =========================================================
+   PROFILE HERO
+========================================================= */
+
+.hero {
+    border-radius: 22px;
+
+    overflow: hidden;
+
+    background: white;
+
+    border: 1px solid var(--border);
+
+    margin-bottom: 22px;
+}
+
+.hero-cover {
+    height: 185px;
+
+    background:
+        radial-gradient(
+            circle at 15% 40%,
+            rgba(255,255,255,.22) 0 80px,
+            transparent 81px
+        ),
+        radial-gradient(
+            circle at 80% 20%,
+            rgba(255,255,255,.18) 0 120px,
+            transparent 121px
+        ),
+        linear-gradient(
+            135deg,
+            #ffab19,
+            #ff6680 55%,
+            #8b5cf6
+        );
+
+    position: relative;
+}
+
+.hero-pattern {
+    position: absolute;
+
+    inset: 0;
+
+    opacity: .15;
+
+    background-image:
+        radial-gradient(
+            white 1px,
+            transparent 1px
+        );
+
+    background-size: 22px 22px;
+}
+
+.hero-content {
+    padding: 0 28px 27px;
+
+    position: relative;
+}
+
+.profile-row {
+    display: flex;
+
+    align-items: flex-end;
+
+    gap: 20px;
+
+    margin-top: -62px;
+}
+
+.avatar {
+    width: 125px;
+    height: 125px;
+
+    border-radius: 50%;
+
+    border: 6px solid white;
+
+    object-fit: cover;
+
+    background: #ddd;
+
+    box-shadow:
+        0 8px 25px
+        rgba(0,0,0,.15);
+}
+
+.profile-main {
+    padding-bottom: 7px;
+
+    flex: 1;
+}
+
+.profile-name {
+    font-size: 30px;
+
+    font-weight: 900;
+
+    margin: 0;
+}
+
+.username {
+    color: var(--muted);
+
+    font-size: 14px;
+
+    margin-top: 3px;
+}
+
+.profile-buttons {
+    display: flex;
+
+    gap: 8px;
+}
+
+.profile-button {
+    padding: 10px 15px;
+
+    border-radius: 9px;
+
+    border: 1px solid var(--border);
+
+    text-decoration: none;
+
+    color: inherit;
+
+    font-size: 13px;
+
+    font-weight: 700;
+}
+
+.profile-button.primary {
+    background: var(--orange);
+
+    color: white;
+
+    border-color: var(--orange);
+}
+
+.profile-description {
+    margin-top: 23px;
+
+    display: grid;
+
+    grid-template-columns: 1fr 1fr;
+
+    gap: 15px;
+}
+
+.bio-box {
+    background: #f8fafc;
+
+    border-radius: 14px;
+
+    padding: 17px;
+}
+
+body.dark .bio-box {
+    background: #0f172a;
+}
+
+.bio-title {
+    font-size: 11px;
+
+    color: var(--muted);
+
+    font-weight: 850;
+
+    letter-spacing: .7px;
+
+    margin-bottom: 7px;
+}
+
+.bio-text {
+    white-space: pre-wrap;
+
+    line-height: 1.55;
+
+    font-size: 14px;
+}
+
+
+/* =========================================================
+   STATS
+========================================================= */
+
+.stats {
+    display: grid;
+
+    grid-template-columns:
+        repeat(6, 1fr);
+
+    gap: 13px;
+
+    margin-bottom: 22px;
+}
+
+.stat-card {
+    background: white;
+
+    border: 1px solid var(--border);
+
+    border-radius: 15px;
+
+    padding: 18px;
+
+    position: relative;
+
+    overflow: hidden;
+}
+
+.stat-icon {
+    font-size: 18px;
+
+    margin-bottom: 10px;
+}
+
+.stat-value {
+    font-size: 24px;
+
+    font-weight: 900;
+}
+
+.stat-label {
+    color: var(--muted);
+
+    font-size: 12px;
+
+    margin-top: 3px;
+}
+
+.stat-card::after {
+    content: "";
+
+    position: absolute;
+
+    width: 70px;
+    height: 70px;
+
+    border-radius: 50%;
+
+    right: -25px;
+    bottom: -30px;
+
+    background: #fff3d6;
+
+    opacity: .7;
+}
+
+
+/* =========================================================
+   GRID
+========================================================= */
+
+.grid {
+    display: grid;
+
+    grid-template-columns:
+        minmax(0, 2fr)
+        minmax(300px, 1fr);
+
+    gap: 20px;
+
+    margin-bottom: 20px;
+}
+
+
+/* =========================================================
+   CARD
+========================================================= */
+
+.card {
+    background: white;
+
+    border: 1px solid var(--border);
+
+    border-radius: 18px;
+
+    padding: 22px;
+
+    min-width: 0;
+}
+
+.card-header {
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    gap: 10px;
+
+    margin-bottom: 18px;
+}
+
+.card-title {
+    margin: 0;
+
+    font-size: 18px;
+
+    font-weight: 850;
+}
+
+.card-subtitle {
+    color: var(--muted);
+
+    font-size: 12px;
+}
+
+.select {
+    padding: 8px 10px;
+
+    border-radius: 8px;
+
+    border: 1px solid var(--border);
+
+    background: white;
+
+    font-size: 12px;
+}
+
+
+/* =========================================================
+   FOLLOWER CHART
+========================================================= */
+
+.chart-area {
+    width: 100%;
+
+    height: 260px;
+
+    position: relative;
+
+    border-left: 1px solid var(--border);
+
+    border-bottom: 1px solid var(--border);
+
+    overflow: hidden;
+}
+
+.chart-grid {
+    position: absolute;
+
+    inset: 0;
+
+    display: flex;
+
+    flex-direction: column;
+
+    justify-content: space-between;
+
+    padding: 12px 0;
+}
+
+.chart-grid-line {
+    width: 100%;
+
+    border-top: 1px dashed var(--border);
+}
+
+.chart-svg {
+    position: absolute;
+
+    inset: 0;
+
+    width: 100%;
+
+    height: 100%;
+}
+
+.chart-empty {
+    position: absolute;
+
+    inset: 0;
+
+    display: grid;
+
+    place-items: center;
+
+    color: var(--muted);
+
+    text-align: center;
+
+    padding: 30px;
+
+    font-size: 13px;
+}
+
+.chart-labels {
+    display: flex;
+
+    justify-content: space-between;
+
+    color: var(--muted);
+
+    font-size: 10px;
+
+    margin-top: 7px;
+}
+
+
+/* =========================================================
+   RANKING
+========================================================= */
+
+.ranking {
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 9px;
+}
+
+.rank-item {
+    display: grid;
+
+    grid-template-columns:
+        34px
+        72px
+        minmax(0,1fr)
+        auto;
+
+    align-items: center;
+
+    gap: 11px;
+
+    padding: 9px;
+
+    border-radius: 11px;
+
+    transition: .12s;
+}
+
+.rank-item:hover {
+    background: #f8fafc;
+}
+
+body.dark .rank-item:hover {
+    background: #0f172a;
+}
+
+.rank-number {
+    width: 28px;
+    height: 28px;
+
+    display: grid;
+    place-items: center;
+
+    border-radius: 8px;
+
+    background: #f1f5f9;
+
+    font-weight: 900;
+
+    font-size: 12px;
+}
+
+body.dark .rank-number {
+    background: #334155;
+}
+
+.rank-thumbnail {
+    width: 72px;
+    height: 54px;
+
+    border-radius: 7px;
+
+    object-fit: cover;
+
+    background: #ddd;
+}
+
+.rank-info {
+    min-width: 0;
+}
+
+.rank-title {
+    font-size: 13px;
+
+    font-weight: 750;
+
+    white-space: nowrap;
+
+    overflow: hidden;
+
+    text-overflow: ellipsis;
+}
+
+.rank-meta {
+    margin-top: 4px;
+
+    color: var(--muted);
+
+    font-size: 10px;
+}
+
+.rank-score {
+    text-align: right;
+
+    font-size: 11px;
+
+    line-height: 1.6;
+
+    white-space: nowrap;
+}
+
+
+/* =========================================================
+   PROJECT GRID
+========================================================= */
+
+.projects {
+    display: grid;
+
+    grid-template-columns:
+        repeat(4, minmax(0,1fr));
+
+    gap: 14px;
+}
+
+.project {
+    overflow: hidden;
+
+    border: 1px solid var(--border);
+
+    border-radius: 13px;
+
+    text-decoration: none;
+
+    color: inherit;
+
+    background: white;
+
+    transition:
+        transform .15s,
+        box-shadow .15s;
+}
+
+.project:hover {
+    transform: translateY(-4px);
+
+    box-shadow:
+        0 10px 25px
+        rgba(0,0,0,.09);
+}
+
+.project-image {
+    width: 100%;
+
+    aspect-ratio: 4/3;
+
+    object-fit: cover;
+
+    display: block;
+
+    background: #ddd;
+}
+
+.project-body {
+    padding: 12px;
+}
+
+.project-title {
+    font-size: 13px;
+
+    font-weight: 800;
+
+    white-space: nowrap;
+
+    overflow: hidden;
+
+    text-overflow: ellipsis;
+}
+
+.project-meta {
+    display: flex;
+
+    gap: 10px;
+
+    color: var(--muted);
+
+    font-size: 10px;
+
+    margin-top: 7px;
+}
+
+
+/* =========================================================
+   ACTIVITY
+========================================================= */
+
+.activity {
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 2px;
+}
+
+.activity-item {
+    display: flex;
+
+    gap: 13px;
+
+    padding: 12px 4px;
+
+    border-bottom: 1px solid var(--border);
+}
+
+.activity-item:last-child {
+    border-bottom: 0;
+}
+
+.activity-icon {
+    width: 34px;
+    height: 34px;
+
+    flex: 0 0 34px;
+
+    display: grid;
+    place-items: center;
+
+    border-radius: 10px;
+
+    background: #fff3d6;
+}
+
+.activity-title {
+    font-size: 13px;
+
+    font-weight: 700;
+}
+
+.activity-time {
+    color: var(--muted);
+
+    font-size: 10px;
+
+    margin-top: 4px;
+}
+
+
+/* =========================================================
+   USER LIST
+========================================================= */
+
+.users {
+    display: grid;
+
+    grid-template-columns:
+        repeat(3, 1fr);
+
+    gap: 9px;
+}
+
+.mini-user {
+    display: flex;
+
+    align-items: center;
+
+    gap: 9px;
+
+    padding: 9px;
+
+    border: 1px solid var(--border);
+
+    border-radius: 10px;
+
+    text-decoration: none;
+
+    color: inherit;
+
+    min-width: 0;
+}
+
+.mini-user img {
+    width: 38px;
+    height: 38px;
+
+    border-radius: 50%;
+
+    object-fit: cover;
+}
+
+.mini-user-name {
+    font-size: 11px;
+
+    font-weight: 700;
+
+    white-space: nowrap;
+
+    overflow: hidden;
+
+    text-overflow: ellipsis;
+}
+
+
+/* =========================================================
+   ACCOUNT INFO
+========================================================= */
+
+.info-grid {
+    display: grid;
+
+    grid-template-columns:
+        repeat(2, 1fr);
+
+    gap: 10px;
+}
+
+.info-item {
+    background: #f8fafc;
+
+    border-radius: 10px;
+
+    padding: 13px;
+}
+
+body.dark .info-item {
+    background: #0f172a;
+}
+
+.info-label {
+    color: var(--muted);
+
+    font-size: 10px;
+
+    margin-bottom: 4px;
+}
+
+.info-value {
+    font-size: 13px;
+
+    font-weight: 750;
+}
+
+
+/* =========================================================
+   LOADING
+========================================================= */
+
+.loading {
+    padding: 90px 20px;
+
+    text-align: center;
+
+    color: var(--muted);
+}
+
+.spinner {
+    width: 42px;
+    height: 42px;
+
+    margin:
+        0 auto
+        15px;
+
+    border:
+        4px solid #e5e7eb;
+
+    border-top-color:
+        var(--orange);
+
+    border-radius: 50%;
+
+    animation:
+        spin .7s linear infinite;
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+
+/* =========================================================
+   ERROR
+========================================================= */
+
+.error {
+    background: #fee2e2;
+
+    color: #991b1b;
+
+    padding: 14px 16px;
+
+    border-radius: 11px;
+
+    margin-bottom: 18px;
+
+    font-size: 13px;
+}
+
+
+/* =========================================================
+   EMPTY
+========================================================= */
+
+.empty {
+    color: var(--muted);
+
+    text-align: center;
+
+    padding: 30px;
+
+    font-size: 13px;
+}
+
+
+/* =========================================================
+   FOOTER
+========================================================= */
+
+footer {
+    text-align: center;
+
+    color: var(--muted);
+
+    font-size: 11px;
+
+    padding: 20px;
+}
+
+
+/* =========================================================
+   RESPONSIVE
+========================================================= */
+
+@media(max-width:1100px) {
+
+    .stats {
+        grid-template-columns:
+            repeat(3, 1fr);
+    }
+
+    .projects {
+        grid-template-columns:
+            repeat(3, 1fr);
+    }
+
+    .users {
+        grid-template-columns:
+            repeat(2, 1fr);
+    }
+}
+
+
+@media(max-width:800px) {
+
+    :root {
+        --sidebar-width: 0px;
+    }
+
+    .sidebar {
+        display: none;
+    }
+
+    .main {
+        margin-left: 0;
+    }
+
+    .topbar {
+        padding: 0 15px;
+    }
+
+    .content {
+        padding:
+            18px
+            15px
+            40px;
+    }
+
+    .grid {
+        grid-template-columns: 1fr;
+    }
+
+    .profile-row {
+        align-items: center;
+
+        flex-direction: column;
+
+        text-align: center;
+    }
+
+    .profile-buttons {
+        justify-content: center;
+    }
+
+    .profile-description {
+        grid-template-columns: 1fr;
+    }
+
+    .projects {
+        grid-template-columns:
+            repeat(2, 1fr);
+    }
+}
+
+
+@media(max-width:500px) {
+
+    .stats {
+        grid-template-columns:
+            repeat(2, 1fr);
+    }
+
+    .projects {
+        grid-template-columns: 1fr;
+    }
+
+    .users {
+        grid-template-columns: 1fr;
+    }
+
+    .profile-name {
+        font-size: 25px;
+    }
+
+    .search button {
+        padding: 0 13px;
+    }
+
+    .rank-item {
+        grid-template-columns:
+            28px
+            58px
+            minmax(0,1fr);
+    }
+
+    .rank-thumbnail {
+        width: 58px;
+        height: 44px;
+    }
+
+    .rank-score {
+        display: none;
+    }
+}
+
+
+/* =========================================================
+   UTIL
+========================================================= */
+
+.hidden {
+    display: none !important;
+}
+</style>
+</head>
+
+
+<body>
+
+<div class="app">
+
+    <!-- =====================================================
+         SIDEBAR
+    ====================================================== -->
+
+    <aside class="sidebar">
+
+        <div class="brand">
+
+            <div class="brand-icon">
+                S
+            </div>
+
+            <div>
+                Scratch<br>
+                <span style="font-size:11px;color:#94a3b8">
+                    User Analytics
+                </span>
+            </div>
+
+        </div>
+
+
+        <div class="nav-title">
+            DASHBOARD
+        </div>
+
+        <a
+            href="#overview"
+            class="nav-item active">
+
+            <span class="nav-icon">📊</span>
+
+            Overview
+
+        </a>
+
+        <a
+            href="#projects-section"
+            class="nav-item">
+
+            <span class="nav-icon">🎮</span>
+
+            Projects
+
+        </a>
+
+        <a
+            href="#activity-section"
+            class="nav-item">
+
+            <span class="nav-icon">⚡</span>
+
+            Activity
+
+        </a>
+
+        <a
+            href="#community-section"
+            class="nav-item">
+
+            <span class="nav-icon">👥</span>
+
+            Community
+
+        </a>
+
+
+        <div class="nav-title">
+            EXTERNAL
+        </div>
+
+        <a
+            id="sidebarProfile"
+            href="#"
+            target="_blank"
+            class="nav-item">
+
+            <span class="nav-icon">↗️</span>
+
+            Scratch Profile
+
+        </a>
+
+    </aside>
+
+
+    <!-- =====================================================
+         MAIN
+    ====================================================== -->
+
+    <div class="main">
+
+        <!-- TOPBAR -->
+
+        <header class="topbar">
+
+            <div class="search">
+
+                <input
+                    id="usernameInput"
+                    placeholder="Scratchユーザー名を検索..."
+                    autocomplete="off"
+                >
+
+                <button
+                    onclick="loadUser()">
+
+                    検索
+
+                </button>
+
+            </div>
+
+
+            <div class="top-actions">
+
+                <button
+                    class="top-button"
+                    onclick="toggleDarkMode()"
+                    title="ダークモード">
+
+                    🌙
+
+                </button>
+
+            </div>
+
+        </header>
+
+
+        <!-- CONTENT -->
+
+        <main class="content">
+
+            <div
+                id="error"
+                class="error hidden">
+            </div>
+
+
+            <div
+                id="loading"
+                class="loading hidden">
+
+                <div class="spinner"></div>
+
+                Scratch APIから
+                データを取得しています...
+
+            </div>
+
+
+            <div
+                id="dashboard"
+                class="hidden">
+
+
+                <!-- =================================================
+                     PROFILE
+                ================================================== -->
+
+                <section
+                    id="overview"
+                    class="hero">
+
+                    <div class="hero-cover">
+
+                        <div class="hero-pattern"></div>
+
+                    </div>
+
+
+                    <div class="hero-content">
+
+                        <div class="profile-row">
+
+                            <img
+                                id="avatar"
+                                class="avatar"
+                                alt="avatar"
+                            >
+
+
+                            <div class="profile-main">
+
+                                <h1
+                                    id="profileName"
+                                    class="profile-name">
+                                </h1>
+
+                                <div
+                                    id="username"
+                                    class="username">
+                                </div>
+
+                            </div>
+
+
+                            <div
+                                class="profile-buttons">
+
+                                <a
+                                    id="scratchProfile"
+                                    class="profile-button primary"
+                                    target="_blank">
+
+                                    Scratchで見る ↗
+
+                                </a>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="profile-description">
+
+                            <div class="bio-box">
+
+                                <div class="bio-title">
+                                    ABOUT ME
+                                </div>
+
+                                <div
+                                    id="bio"
+                                    class="bio-text">
+                                </div>
+
+                            </div>
+
+
+                            <div class="bio-box">
+
+                                <div class="bio-title">
+                                    WHAT I'M WORKING ON
+                                </div>
+
+                                <div
+                                    id="status"
+                                    class="bio-text">
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </section>
+
+
+
+                <!-- =================================================
+                     STATS
+                ================================================== -->
+
+                <section class="stats">
+
+                    <div class="stat-card">
+
+                        <div class="stat-icon">
+                            👥
+                        </div>
+
+                        <div
+                            id="followers"
+                            class="stat-value">
+                            -
+                        </div>
+
+                        <div class="stat-label">
+                            Followers
+                        </div>
+
+                    </div>
+
+
+                    <div class="stat-card">
+
+                        <div class="stat-icon">
+                            ➡️
+                        </div>
+
+                        <div
+                            id="following"
+                            class="stat-value">
+                            -
+                        </div>
+
+                        <div class="stat-label">
+                            Following
+                        </div>
+
+                    </div>
+
+
+                    <div class="stat-card">
+
+                        <div class="stat-icon">
+                            🎮
+                        </div>
+
+                        <div
+                            id="projectCount"
+                            class="stat-value">
+                            -
+                        </div>
+
+                        <div class="stat-label">
+                            Projects
+                        </div>
+
+                    </div>
+
+
+                    <div class="stat-card">
+
+                        <div class="stat-icon">
+                            ❤️
+                        </div>
+
+                        <div
+                            id="loveTotal"
+                            class="stat-value">
+                            -
+                        </div>
+
+                        <div class="stat-label">
+                            Total Loves
+                        </div>
+
+                    </div>
+
+
+                    <div class="stat-card">
+
+                        <div class="stat-icon">
+                            ⭐
+                        </div>
+
+                        <div
+                            id="favoriteTotal"
+                            class="stat-value">
+                            -
+                        </div>
+
+                        <div class="stat-label">
+                            Total Favorites
+                        </div>
+
+                    </div>
+
+
+                    <div class="stat-card">
+
+                        <div class="stat-icon">
+                            👁️
+                        </div>
+
+                        <div
+                            id="viewsTotal"
+                            class="stat-value">
+                            -
+                        </div>
+
+                        <div class="stat-label">
+                            Total Views
+                        </div>
+
+                    </div>
+
+                </section>
+
+
+
+                <!-- =================================================
+                     CHART + RANKING
+                ================================================== -->
+
+                <div class="grid">
+
+
+                    <!-- FOLLOWER CHART -->
+
+                    <section class="card">
+
+                        <div class="card-header">
+
+                            <div>
+
+                                <h2 class="card-title">
+                                    フォロワー推移
+                                </h2>
+
+                                <div class="card-subtitle">
+                                    このブラウザで取得した履歴
+                                </div>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="chart-area">
+
+                            <div
+                                id="chartGrid"
+                                class="chart-grid">
+
+                                <div class="chart-grid-line"></div>
+                                <div class="chart-grid-line"></div>
+                                <div class="chart-grid-line"></div>
+                                <div class="chart-grid-line"></div>
+                                <div class="chart-grid-line"></div>
+
+                            </div>
+
+
+                            <svg
+                                id="chartSvg"
+                                class="chart-svg"
+                                viewBox="0 0 1000 260"
+                                preserveAspectRatio="none">
+
+                                <defs>
+
+                                    <linearGradient
+                                        id="areaGradient"
+                                        x1="0"
+                                        y1="0"
+                                        x2="0"
+                                        y2="1">
+
+                                        <stop
+                                            offset="0%"
+                                            stop-opacity=".25"
+                                        />
+
+                                        <stop
+                                            offset="100%"
+                                            stop-opacity="0"
+                                        />
+
+                                    </linearGradient>
+
+                                </defs>
+
+                                <path
+                                    id="chartAreaPath"
+                                    fill="url(#areaGradient)"
+                                    stroke="none">
+                                </path>
+
+                                <polyline
+                                    id="chartLine"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    stroke-width="5"
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round">
+                                </polyline>
+
+                            </svg>
+
+
+                            <div
+                                id="chartEmpty"
+                                class="chart-empty hidden">
+                            </div>
+
+                        </div>
+
+
+                        <div
+                            id="chartLabels"
+                            class="chart-labels">
+                        </div>
+
+                    </section>
+
+
+
+                    <!-- RANKING -->
+
+                    <section class="card">
+
+                        <div class="card-header">
+
+                            <div>
+
+                                <h2 class="card-title">
+                                    人気作品ランキング
+                                </h2>
+
+                                <div class="card-subtitle">
+                                    Love + Favorite を基準
+                                </div>
+
+                            </div>
+
+                            <select
+                                id="rankingSort"
+                                class="select"
+                                onchange="renderRanking()">
+
+                                <option value="engagement">
+                                    人気度
+                                </option>
+
+                                <option value="love">
+                                    Love
+                                </option>
+
+                                <option value="favorite">
+                                    Favorite
+                                </option>
+
+                                <option value="views">
+                                    Views
+                                </option>
+
+                            </select>
+
+                        </div>
+
+
+                        <div
+                            id="ranking"
+                            class="ranking">
+                        </div>
+
+                    </section>
+
+                </div>
+
+
+
+                <!-- =================================================
+                     PROJECTS
+                ================================================== -->
+
+                <section
+                    id="projects-section"
+                    class="card"
+                    style="margin-bottom:20px">
+
+                    <div class="card-header">
+
+                        <div>
+
+                            <h2 class="card-title">
+                                🎮 共有作品
+                            </h2>
+
+                            <div
+                                id="projectSubtitle"
+                                class="card-subtitle">
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                    <div
+                        id="projects"
+                        class="projects">
+                    </div>
+
+                </section>
+
+
+
+                <!-- =================================================
+                     ACTIVITY
+                ================================================== -->
+
+                <section
+                    id="activity-section"
+                    class="card"
+                    style="margin-bottom:20px">
+
+                    <div class="card-header">
+
+                        <div>
+
+                            <h2 class="card-title">
+                                ⚡ 活動履歴
+                            </h2>
+
+                            <div class="card-subtitle">
+                                APIから確認できる最近の活動
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                    <div
+                        id="activity"
+                        class="activity">
+                    </div>
+
+                </section>
+
+
+
+                <!-- =================================================
+                     COMMUNITY
+                ================================================== -->
+
+                <div
+                    id="community-section"
+                    class="grid">
+
+
+                    <!-- FOLLOWING -->
+
+                    <section class="card">
+
+                        <div class="card-header">
+
+                            <div>
+
+                                <h2 class="card-title">
+                                    👥 フォロー中
+                                </h2>
+
+                                <div class="card-subtitle">
+                                    最大50件表示
+                                </div>
+
+                            </div>
+
+                        </div>
+
+
+                        <div
+                            id="followingList"
+                            class="users">
+                        </div>
+
+                    </section>
+
+
+                    <!-- FOLLOWERS -->
+
+                    <section class="card">
+
+                        <div class="card-header">
+
+                            <div>
+
+                                <h2 class="card-title">
+                                    ⭐ フォロワー
+                                </h2>
+
+                                <div class="card-subtitle">
+                                    最大50件表示
+                                </div>
+
+                            </div>
+
+                        </div>
+
+
+                        <div
+                            id="followersList"
+                            class="users">
+                        </div>
+
+                    </section>
+
+                </div>
+
+
+
+                <!-- =================================================
+                     ACCOUNT
+                ================================================== -->
+
+                <section
+                    class="card"
+                    style="margin-bottom:20px">
+
+                    <div class="card-header">
+
+                        <h2 class="card-title">
+                            👤 アカウント情報
+                        </h2>
+
+                    </div>
+
+
+                    <div class="info-grid">
+
+                        <div class="info-item">
+
+                            <div class="info-label">
+                                USER ID
+                            </div>
+
+                            <div
+                                id="userId"
+                                class="info-value">
+                            </div>
+
+                        </div>
+
+
+                        <div class="info-item">
+
+                            <div class="info-label">
+                                JOINED
+                            </div>
+
+                            <div
+                                id="joined"
+                                class="info-value">
+                            </div>
+
+                        </div>
+
+
+                        <div class="info-item">
+
+                            <div class="info-label">
+                                COUNTRY
+                            </div>
+
+                            <div
+                                id="country"
+                                class="info-value">
+                            </div>
+
+                        </div>
+
+
+                        <div class="info-item">
+
+                            <div class="info-label">
+                                SCRATCH TEAM
+                            </div>
+
+                            <div
+                                id="scratchTeam"
+                                class="info-value">
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </section>
+
+
+            </div>
+
+        </main>
+
+
+        <footer>
+
+            Scratch User Analytics Dashboard
+            · Public Scratch API data
+
+        </footer>
+
+    </div>
+
+</div>
+
+
+<script>
+
+/* =========================================================
+   CONFIG
+========================================================= */
+
+const API =
+    "https://api.scratch.mit.edu";
+
+let currentUser = null;
+let currentProjects = [];
+
+
+/* =========================================================
+   API
+========================================================= */
+
+async function apiFetch(path) {
+
+    const response =
+        await fetch(
+            API + path,
+            {
+                headers: {
+                    "Accept":
+                        "application/json"
+                }
+            }
+        );
+
+    if (!response.ok) {
+
+        throw new Error(
+            `HTTP ${response.status}`
+        );
+
+    }
+
+    return await response.json();
+}
+
+
+/* =========================================================
+   UTIL
+========================================================= */
+
+function escapeHTML(value) {
+
+    if (
+        value === null ||
+        value === undefined
+    ) {
+        return "";
+    }
+
+    return String(value)
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#039;");
+}
+
+
+function number(value) {
+
+    if (
+        value === null ||
+        value === undefined ||
+        Number.isNaN(Number(value))
+    ) {
+        return "-";
+    }
+
+    return Number(value)
+        .toLocaleString("ja-JP");
+}
+
+
+function date(value) {
+
+    if (!value) {
+        return "-";
+    }
+
+    const d =
+        new Date(value);
+
+    if (
+        Number.isNaN(
+            d.getTime()
+        )
+    ) {
+        return value;
+    }
+
+    return d.toLocaleDateString(
+        "ja-JP",
+        {
+            year: "numeric",
+            month: "short",
+            day: "numeric"
+        }
+    );
+}
+
+
+function timeAgo(value) {
+
+    if (!value) {
+        return "";
+    }
+
+    const d =
+        new Date(value);
+
+    const diff =
+        Date.now() -
+        d.getTime();
+
+    const minute =
+        60 * 1000;
+
+    const hour =
+        60 * minute;
+
+    const day =
+        24 * hour;
+
+    if (diff < hour) {
+
+        return Math.max(
+            1,
+            Math.floor(
+                diff / minute
+            )
+        ) + "分前";
+
+    }
+
+    if (diff < day) {
+
+        return Math.floor(
+            diff / hour
+        ) + "時間前";
+
+    }
+
+    if (diff < 30 * day) {
+
+        return Math.floor(
+            diff / day
+        ) + "日前";
+
+    }
+
+    return date(value);
+}
+
+
+/* =========================================================
+   LOAD
+========================================================= */
+
+async function loadUser() {
+
+    const input =
+        document.getElementById(
+            "usernameInput"
+        );
+
+    const username =
+        input.value.trim();
+
+    if (!username) {
+
+        showError(
+            "Scratchユーザー名を入力してください。"
+        );
+
+        return;
+    }
+
+
+    setLoading(true);
+
+    hideError();
+
+
+    try {
+
+        /*
+         * User
+         */
+
+        const user =
+            await apiFetch(
+                `/users/${encodeURIComponent(username)}`
+            );
+
+
+        /*
+         * Projects
+         */
+
+        const projects =
+            await apiFetch(
+                `/users/${encodeURIComponent(username)}/projects?limit=40&offset=0`
+            );
+
+
+        /*
+         * Following
+         */
+
+        const following =
+            await apiFetch(
+                `/users/${encodeURIComponent(username)}/following?limit=50&offset=0`
+            );
+
+
+        /*
+         * Followers
+         */
+
+        const followers =
+            await apiFetch(
+                `/users/${encodeURIComponent(username)}/followers?limit=50&offset=0`
+            );
+
+
+        currentUser =
+            user;
+
+        currentProjects =
+            projects || [];
+
+
+        renderUser(
+            user,
+            projects || [],
+            following || [],
+            followers || []
+        );
+
+
+        saveFollowerSnapshot(
+            user
+        );
+
+
+        renderFollowerChart(
+            user.username
+        );
+
+
+        document
+            .getElementById(
+                "dashboard"
+            )
+            .classList.remove(
+                "hidden"
+            );
+
+
+        history.replaceState(
+            null,
+            "",
+            `?user=${encodeURIComponent(user.username)}`
+        );
+
+
+    } catch (error) {
+
+        console.error(error);
+
+        showError(
+            "データを取得できませんでした。" +
+            " ユーザー名を確認するか、" +
+            "しばらく待ってから再試行してください。"
+        );
+
+    } finally {
+
+        setLoading(false);
+
+    }
+}
+
+
+/* =========================================================
+   RENDER USER
+========================================================= */
+
+function renderUser(
+    user,
+    projects,
+    following,
+    followers
+) {
+
+    const profile =
+        user.profile || {};
+
+    const stats =
+        user.stats || {};
+
+
+    /*
+     * Profile
+     */
+
+    const avatar =
+        profile.images?.["90x90"]
+        ||
+        `https://uploads.scratch.mit.edu/get_image/user/${user.id}_90x90.png`;
+
+
+    document
+        .getElementById("avatar")
+        .src = avatar;
+
+
+    document
+        .getElementById("profileName")
+        .textContent =
+        user.username;
+
+
+    document
+        .getElementById("username")
+        .textContent =
+        "@" + user.username;
+
+
+    const profileURL =
+        `https://scratch.mit.edu/users/${encodeURIComponent(user.username)}/`;
+
+
+    document
+        .getElementById("scratchProfile")
+        .href =
+        profileURL;
+
+
+    document
+        .getElementById("sidebarProfile")
+        .href =
+        profileURL;
+
+
+    /*
+     * Bio
+     */
+
+    document
+        .getElementById("bio")
+        .textContent =
+        profile.bio ||
+        "プロフィールは設定されていません。";
+
+
+    document
+        .getElementById("status")
+        .textContent =
+        profile.status ||
+        "現在の活動内容は設定されていません。";
+
+
+    /*
+     * Stats
+     */
+
+    document
+        .getElementById("followers")
+        .textContent =
+        number(
+            stats.followers
+        );
+
+
+    document
+        .getElementById("following")
+        .textContent =
+        number(
+            stats.following
+        );
+
+
+    document
+        .getElementById("projectCount")
+        .textContent =
+        number(
+            projects.length
+        );
+
+
+    /*
+     * Project statistics
+     */
+
+    const totals =
+        calculateProjectTotals(
+            projects
+        );
+
+
+    document
+        .getElementById("loveTotal")
+        .textContent =
+        number(
+            totals.loves
+        );
+
+
+    document
+        .getElementById("favoriteTotal")
+        .textContent =
+        number(
+            totals.favorites
+        );
+
+
+    document
+        .getElementById("viewsTotal")
+        .textContent =
+        number(
+            totals.views
+        );
+
+
+    /*
+     * Account
+     */
+
+    document
+        .getElementById("userId")
+        .textContent =
+        user.id ?? "-";
+
+
+    document
+        .getElementById("joined")
+        .textContent =
+        date(
+            user.history?.joined
+        );
+
+
+    document
+        .getElementById("country")
+        .textContent =
+        profile.country ||
+        "非公開 / 未設定";
+
+
+    document
+        .getElementById("scratchTeam")
+        .textContent =
+        user.scratchteam
+            ? "Yes"
+            : "No";
+
+
+    /*
+     * Projects
+     */
+
+    document
+        .getElementById("projectSubtitle")
+        .textContent =
+        `${projects.length}作品を取得`;
+
+
+    renderProjects(
+        projects
+    );
+
+
+    /*
+     * Ranking
+     */
+
+    renderRanking();
+
+
+    /*
+     * Activity
+     */
+
+    renderActivity(
+        user,
+        projects
+    );
+
+
+    /*
+     * Users
+     */
+
+    renderUsers(
+        following,
+        document.getElementById(
+            "followingList"
+        )
+    );
+
+
+    renderUsers(
+        followers,
+        document.getElementById(
+            "followersList"
+        )
+    );
+}
+
+
+/* =========================================================
+   PROJECT TOTALS
+========================================================= */
+
+function calculateProjectTotals(
+    projects
+) {
+
+    let loves = 0;
+    let favorites = 0;
+    let views = 0;
+
+
+    projects.forEach(
+        project => {
+
+            loves +=
+                Number(
+                    project.stats?.love_count ??
+                    project.love_count ??
+                    0
+                );
+
+            favorites +=
+                Number(
+                    project.stats?.favorite_count ??
+                    project.favorite_count ??
+                    0
+                );
+
+            views +=
+                Number(
+                    project.stats?.views ??
+                    project.view_count ??
+                    0
+                );
+
+        }
+    );
+
+
+    return {
+        loves,
+        favorites,
+        views
+    };
+}
+
+
+/* =========================================================
+   PROJECTS
+========================================================= */
+
+function renderProjects(
+    projects
+) {
+
+    const container =
+        document.getElementById(
+            "projects"
+        );
+
+    container.innerHTML = "";
+
+
+    if (!projects.length) {
+
+        container.innerHTML =
+            `<div class="empty">
+                共有作品はありません。
+            </div>`;
+
+        return;
+    }
+
+
+    projects.forEach(
+        project => {
+
+            const love =
+                Number(
+                    project.stats?.love_count ??
+                    project.love_count ??
+                    0
+                );
+
+            const favorite =
+                Number(
+                    project.stats?.favorite_count ??
+                    project.favorite_count ??
+                    0
+                );
+
+            const views =
+                Number(
+                    project.stats?.views ??
+                    project.view_count ??
+                    0
+                );
+
+
+            const element =
+                document.createElement(
+                    "a"
+                );
+
+            element.className =
+                "project";
+
+            element.href =
+                `https://scratch.mit.edu/projects/${project.id}/`;
+
+            element.target =
+                "_blank";
+
+            element.rel =
+                "noopener noreferrer";
+
+
+            const image =
+                `https://uploads.scratch.mit.edu/get_image/project/${project.id}_480x360.png`;
+
+
+            element.innerHTML = `
+
+                <img
+                    class="project-image"
+                    src="${image}"
+                    alt=""
+                    loading="lazy"
+                    onerror="
+                        this.src =
+                        'https://scratch.mit.edu/images/logo_sm.png'
+                    "
+                >
+
+                <div class="project-body">
+
+                    <div class="project-title">
+                        ${escapeHTML(
+                            project.title
+                        )}
+                    </div>
+
+                    <div class="project-meta">
+
+                        <span>
+                            ❤️ ${number(love)}
+                        </span>
+
+                        <span>
+                            ⭐ ${number(favorite)}
+                        </span>
+
+                        <span>
+                            👁️ ${number(views)}
+                        </span>
+
+                    </div>
+
+                </div>
+            `;
+
+
+            container.appendChild(
+                element
+            );
+
+        }
+    );
+}
+
+
+/* =========================================================
+   RANKING
+========================================================= */
+
+function renderRanking() {
+
+    const container =
+        document.getElementById(
+            "ranking"
+        );
+
+    container.innerHTML = "";
+
+
+    if (!currentProjects.length) {
+
+        container.innerHTML =
+            `<div class="empty">
+                データがありません。
+            </div>`;
+
+        return;
+    }
+
+
+    const sort =
+        document.getElementById(
+            "rankingSort"
+        ).value;
+
+
+    const projects =
+        [...currentProjects];
+
+
+    projects.sort(
+        (a, b) => {
+
+            const aLove =
+                Number(
+                    a.stats?.love_count ??
+                    a.love_count ??
+                    0
+                );
+
+            const bLove =
+                Number(
+                    b.stats?.love_count ??
+                    b.love_count ??
+                    0
+                );
+
+            const aFavorite =
+                Number(
+                    a.stats?.favorite_count ??
+                    a.favorite_count ??
+                    0
+                );
+
+            const bFavorite =
+                Number(
+                    b.stats?.favorite_count ??
+                    b.favorite_count ??
+                    0
+                );
+
+            const aViews =
+                Number(
+                    a.stats?.views ??
+                    a.view_count ??
+                    0
+                );
+
+            const bViews =
+                Number(
+                    b.stats?.views ??
+                    b.view_count ??
+                    0
+                );
+
+
+            if (sort === "love") {
+
+                return bLove - aLove;
+
+            }
+
+            if (sort === "favorite") {
+
+                return bFavorite - aFavorite;
+
+            }
+
+            if (sort === "views") {
+
+                return bViews - aViews;
+
+            }
+
+
+            return (
+                (bLove + bFavorite)
+                -
+                (aLove + aFavorite)
+            );
+
+        }
+    );
+
+
+    projects
+        .slice(0, 10)
+        .forEach(
+            (project, index) => {
+
+                const love =
+                    Number(
+                        project.stats?.love_count ??
+                        project.love_count ??
+                        0
+                    );
+
+                const favorite =
+                    Number(
+                        project.stats?.favorite_count ??
+                        project.favorite_count ??
+                        0
+                    );
+
+                const views =
+                    Number(
+                        project.stats?.views ??
+                        project.view_count ??
+                        0
+                    );
+
+
+                const item =
+                    document.createElement(
+                        "a"
+                    );
+
+                item.className =
+                    "rank-item";
+
+                item.href =
+                    `https://scratch.mit.edu/projects/${project.id}/`;
+
+                item.target =
+                    "_blank";
+
+                item.rel =
+                    "noopener noreferrer";
+
+
+                const image =
+                    `https://uploads.scratch.mit.edu/get_image/project/${project.id}_480x360.png`;
+
+
+                item.innerHTML = `
+
+                    <div class="rank-number">
+                        ${index + 1}
+                    </div>
+
+                    <img
+                        class="rank-thumbnail"
+                        src="${image}"
+                        alt=""
+                        loading="lazy"
+                    >
+
+                    <div class="rank-info">
+
+                        <div class="rank-title">
+                            ${escapeHTML(
+                                project.title
+                            )}
+                        </div>
+
+                        <div class="rank-meta">
+
+                            ${date(
+                                project.history?.modified
+                                ||
+                                project.updated_at
+                            )}
+
+                        </div>
+
+                    </div>
+
+                    <div class="rank-score">
+
+                        ❤️ ${number(love)}<br>
+                        ⭐ ${number(favorite)}<br>
+                        👁️ ${number(views)}
+
+                    </div>
+                `;
+
+
+                container.appendChild(
+                    item
+                );
+
+            }
+        );
+}
+
+
+/* =========================================================
+   ACTIVITY
+========================================================= */
+
+function renderActivity(
+    user,
+    projects
+) {
+
+    const container =
+        document.getElementById(
+            "activity"
+        );
+
+    container.innerHTML = "";
+
+
+    const activities = [];
+
+
+    /*
+     * Account created
+     */
+
+    if (
+        user.history?.joined
+    ) {
+
+        activities.push({
+
+            icon: "🎉",
+
+            title:
+                "Scratchに参加しました",
+
+            time:
+                user.history.joined
+
+        });
+
+    }
+
+
+    /*
+     * Projects
+     */
+
+    projects.forEach(
+        project => {
+
+            const modified =
+                project.history?.modified
+                ||
+                project.updated_at;
+
+
+            if (modified) {
+
+                activities.push({
+
+                    icon: "🎮",
+
+                    title:
+                        `「${project.title}」を更新`,
+
+                    time:
+                        modified,
+
+                    projectId:
+                        project.id
+
+                });
+
+            }
+
+        }
+    );
+
+
+    activities.sort(
+        (a, b) =>
+            new Date(b.time)
+            -
+            new Date(a.time)
+    );
+
+
+    activities
+        .slice(0, 15)
+        .forEach(
+            activity => {
+
+                const item =
+                    document.createElement(
+                        "div"
+                    );
+
+                item.className =
+                    "activity-item";
+
+
+                item.innerHTML = `
+
+                    <div class="activity-icon">
+                        ${activity.icon}
+                    </div>
+
+                    <div>
+
+                        <div class="activity-title">
+                            ${escapeHTML(
+                                activity.title
+                            )}
+                        </div>
+
+                        <div class="activity-time">
+                            ${timeAgo(
+                                activity.time
+                            )}
+                            ·
+                            ${date(
+                                activity.time
+                            )}
+                        </div>
+
+                    </div>
+                `;
+
+
+                if (
+                    activity.projectId
+                ) {
+
+                    item.style.cursor =
+                        "pointer";
+
+                    item.onclick = () => {
+
+                        window.open(
+                            `https://scratch.mit.edu/projects/${activity.projectId}/`,
+                            "_blank"
+                        );
+
+                    };
+
+                }
+
+
+                container.appendChild(
+                    item
+                );
+
+            }
+        );
+
+
+    if (!activities.length) {
+
+        container.innerHTML =
+            `<div class="empty">
+                活動履歴を取得できませんでした。
+            </div>`;
+
+    }
+}
+
+
+/* =========================================================
+   USERS
+========================================================= */
+
+function renderUsers(
+    users,
+    container
+) {
+
+    container.innerHTML = "";
+
+
+    if (!users.length) {
+
+        container.innerHTML =
+            `<div class="empty">
+                データがありません。
+            </div>`;
+
+        return;
+    }
+
+
+    users.forEach(
+        user => {
+
+            const item =
+                document.createElement(
+                    "a"
+                );
+
+            item.className =
+                "mini-user";
+
+            item.href =
+                `https://scratch.mit.edu/users/${encodeURIComponent(user.username)}/`;
+
+            item.target =
+                "_blank";
+
+            item.rel =
+                "noopener noreferrer";
+
+
+            const image =
+                user.profile?.images?.["55x55"]
+                ||
+                `https://uploads.scratch.mit.edu/get_image/user/${user.id}_55x55.png`;
+
+
+            item.innerHTML = `
+
+                <img
+                    src="${image}"
+                    alt=""
+                    loading="lazy"
+                >
+
+                <div class="mini-user-name">
+
+                    ${escapeHTML(
+                        user.username
+                    )}
+
+                </div>
+
+            `;
+
+
+            container.appendChild(
+                item
+            );
+
+        }
+    );
+}
+
+
+/* =========================================================
+   FOLLOWER SNAPSHOT
+=========================================================
+
+   Scratch APIには過去のフォロワー数を
+   直接取得するAPIがないため、
+
+   「このページで検索した時点の値」
+
+   をLocalStorageへ保存します。
+========================================================= */
+
+function snapshotKey(
+    username
+) {
+
+    return (
+        "scratchFollowerHistory:" +
+        username.toLowerCase()
+    );
+
+}
+
+
+function saveFollowerSnapshot(
+    user
+) {
+
+    const followers =
+        Number(
+            user.stats?.followers
+        );
+
+
+    if (
+        Number.isNaN(
+            followers
+        )
+    ) {
+        return;
+    }
+
+
+    const key =
+        snapshotKey(
+            user.username
+        );
+
+
+    let history = [];
+
+
+    try {
+
+        history =
+            JSON.parse(
+                localStorage.getItem(
+                    key
+                )
+            ) || [];
+
+    } catch {
+
+        history = [];
+
+    }
+
+
+    const today =
+        new Date()
+            .toISOString()
+            .slice(0, 10);
+
+
+    const existing =
+        history.find(
+            x =>
+                x.date === today
+        );
+
+
+    if (existing) {
+
+        existing.followers =
+            followers;
+
+    } else {
+
+        history.push({
+
+            date: today,
+
+            followers
+
+        });
+
+    }
+
+
+    /*
+     * 最大180日分
+     */
+
+    history =
+        history.slice(-180);
+
+
+    localStorage.setItem(
+        key,
+        JSON.stringify(history)
+    );
+}
+
+
+/* =========================================================
+   FOLLOWER CHART
+========================================================= */
+
+function renderFollowerChart(
+    username
+) {
+
+    const key =
+        snapshotKey(
+            username
+        );
+
+
+    let history = [];
+
+
+    try {
+
+        history =
+            JSON.parse(
+                localStorage.getItem(
+                    key
+                )
+            ) || [];
+
+    } catch {
+
+        history = [];
+
+    }
+
+
+    const empty =
+        document.getElementById(
+            "chartEmpty"
+        );
+
+    const line =
+        document.getElementById(
+            "chartLine"
+        );
+
+    const area =
+        document.getElementById(
+            "chartAreaPath"
+        );
+
+    const labels =
+        document.getElementById(
+            "chartLabels"
+        );
+
+
+    line.setAttribute(
+        "points",
+        ""
+    );
+
+    area.setAttribute(
+        "d",
+        ""
+    );
+
+    labels.innerHTML = "";
+
+
+    /*
+     * データが1件だけの場合
+     */
+
+    if (
+        history.length < 2
+    ) {
+
+        empty.textContent =
+            "フォロワー推移を表示するには、" +
+            "別の日にもこのページで同じユーザーを検索してください。";
+
+        empty.classList.remove(
+            "hidden"
+        );
+
+        return;
+
+    }
+
+
+    empty.classList.add(
+        "hidden"
+    );
+
+
+    const width = 1000;
+    const height = 260;
+
+    const paddingX = 25;
+    const paddingY = 25;
+
+
+    const values =
+        history.map(
+            x =>
+                Number(
+                    x.followers
+                )
+        );
+
+
+    const min =
+        Math.min(...values);
+
+    const max =
+        Math.max(...values);
+
+
+    const range =
+        Math.max(
+            1,
+            max - min
+        );
+
+
+    const points =
+        history.map(
+            (item, index) => {
+
+                const x =
+                    paddingX +
+                    (
+                        index /
+                        (history.length - 1)
+                    ) *
+                    (
+                        width -
+                        paddingX * 2
+                    );
+
+
+                const y =
+                    height -
+                    paddingY -
+                    (
+                        (
+                            item.followers -
+                            min
+                        ) /
+                        range
+                    ) *
+                    (
+                        height -
+                        paddingY * 2
+                    );
+
+
+                return {
+                    x,
+                    y,
+                    value:
+                        item.followers
+                };
+
+            }
+        );
+
+
+    const pointString =
+        points
+            .map(
+                p =>
+                    `${p.x},${p.y}`
+            )
+            .join(" ");
+
+
+    line.setAttribute(
+        "points",
+        pointString
+    );
+
+
+    /*
+     * Area
+     */
+
+    const areaPath =
+        [
+            `M ${points[0].x} ${height}`,
+            `L ${points[0].x} ${points[0].y}`,
+
+            ...points
+                .slice(1)
+                .map(
+                    p =>
+                        `L ${p.x} ${p.y}`
+                ),
+
+            `L ${points[points.length - 1].x} ${height}`,
+            "Z"
+        ]
+        .join(" ");
+
+
+    area.setAttribute(
+        "d",
+        areaPath
+    );
+
+
+    /*
+     * Labels
+     */
+
+    const selected =
+        [
+            history[0],
+            history[
+                Math.floor(
+                    history.length / 2
+                )
+            ],
+            history[
+                history.length - 1
+            ]
+        ];
+
+
+    selected.forEach(
+        item => {
+
+            const span =
+                document.createElement(
+                    "span"
+                );
+
+            span.textContent =
+                `${item.date} · ${number(item.followers)}`;
+
+            labels.appendChild(
+                span
+            );
+
+        }
+    );
+}
+
+
+/* =========================================================
+   DARK MODE
+========================================================= */
+
+function toggleDarkMode() {
+
+    document.body.classList.toggle(
+        "dark"
+    );
+
+
+    localStorage.setItem(
+        "scratch-dashboard-dark",
+        document.body.classList.contains(
+            "dark"
+        )
+            ? "1"
+            : "0"
+    );
+}
+
+
+if (
+    localStorage.getItem(
+        "scratch-dashboard-dark"
+    ) === "1"
+) {
+
+    document.body.classList.add(
+        "dark"
+    );
+
+}
+
+
+/* =========================================================
+   LOADING / ERROR
+========================================================= */
+
+function setLoading(
+    loading
+) {
+
+    document
+        .getElementById(
+            "loading"
+        )
+        .classList.toggle(
+            "hidden",
+            !loading
+        );
+
+}
+
+
+function showError(
+    message
+) {
+
+    const element =
+        document.getElementById(
+            "error"
+        );
+
+    element.textContent =
+        message;
+
+    element.classList.remove(
+        "hidden"
+    );
+
+}
+
+
+function hideError() {
+
+    document
+        .getElementById(
+            "error"
+        )
+        .classList.add(
+            "hidden"
+        );
+
+}
+
+
+/* =========================================================
+   ENTER KEY
+========================================================= */
+
+document
+    .getElementById(
+        "usernameInput"
+    )
+    .addEventListener(
+        "keydown",
+        event => {
+
+            if (
+                event.key === "Enter"
+            ) {
+
+                loadUser();
+
+            }
+
+        }
+    );
+
+
+/* =========================================================
+   URL PARAMETER
+=========================================================
+
+   ?user=griffpatch
+========================================================= */
+
+const params =
+    new URLSearchParams(
+        location.search
+    );
+
+
+const urlUser =
+    params.get(
+        "user"
+    );
+
+
+if (urlUser) {
+
+    document
+        .getElementById(
+            "usernameInput"
+        )
+        .value =
+        urlUser;
+
+    loadUser();
+
+}
+
+</script>
+
+</body>
+</html>
+```
